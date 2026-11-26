@@ -135,6 +135,7 @@ export default function Perfil() {
             setUser(usuario);
             setName(usuario.nome || usuario.name || "");
             setEmail(usuario.email || "");
+            setTelefone(usuario.telefone || "");
 
             localStorage.setItem(
                 "atelier-user",
@@ -156,6 +157,7 @@ export default function Perfil() {
         setUser(null);
         setName("");
         setEmail("");
+        setTelefone("");
         navigate("/");
     }
 
