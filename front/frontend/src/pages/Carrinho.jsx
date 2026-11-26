@@ -38,7 +38,7 @@ export default function Carrinho() {
     const [erro, setErro] = useState("");
     const [sucesso, setSucesso] = useState("");
 
-    const dataFim = adicionarDias(dataInicio, Number(dias));
+    const dataFim = adicionarDias(dataInicio, Number(dias) - 1);
 
     const total = items.reduce(
         (sum, item) =>
