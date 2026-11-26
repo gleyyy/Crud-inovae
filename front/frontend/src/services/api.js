@@ -70,6 +70,7 @@ function erro(mensagem) {
 
 export async function requisicao(endpoint, opcoes = {}) {
     const metodo = (opcoes.method || "GET").toUpperCase();
+    const [caminho, queryString = ""] = endpoint.split("?");
 
     let dados = {};
 
@@ -86,7 +87,7 @@ export async function requisicao(endpoint, opcoes = {}) {
     // USUÁRIOS
     // =====================================
 
-    if (endpoint === "/api/usuarios/cadastro" && metodo === "POST") {
+    if (caminho === "/api/usuarios/cadastro" && metodo === "POST") {
         const { nome, email, senha } = dados;
 
         if (!nome?.trim() || !email?.trim() || !senha) {
@@ -131,7 +132,7 @@ export async function requisicao(endpoint, opcoes = {}) {
         });
     }
 
-    if (endpoint === "/api/usuarios/login" && metodo === "POST") {
+    if (caminho === "/api/usuarios/login" && metodo === "POST") {
         const { email, senha } = dados;
 
         const usuarios = obterUsuarios();
@@ -159,7 +160,7 @@ export async function requisicao(endpoint, opcoes = {}) {
         });
     }
 
-    if (endpoint === "/api/usuarios/perfil" && metodo === "GET") {
+    if (caminho === "/api/usuarios/perfil" && metodo === "GET") {
         if (!token || !usuarioAtual) {
             erro("Faça login para acessar seu perfil.");
         }
@@ -169,7 +170,7 @@ export async function requisicao(endpoint, opcoes = {}) {
         });
     }
 
-    if (endpoint === "/api/usuarios/perfil" && metodo === "PUT") {
+    if (caminho === "/api/usuarios/perfil" && metodo === "PUT") {
         if (!token || !usuarioAtual) {
             erro("Faça login para atualizar seu perfil.");
         }
@@ -217,8 +218,8 @@ export async function requisicao(endpoint, opcoes = {}) {
     // PRODUTOS
     // =====================================
 
-    if (endpoint === "/api/produtos" && metodo === "GET") {
-        const url = new URLSearchParams(endpoint.includes("?") ? endpoint.split("?")[1] : "");
+    if (caminho === "/api/produtos" && metodo === "GET") {
+        const url = new URLSearchParams(queryString);
 
         let produtos = obterProdutos().filter(
             (produto) => produto.ativo !== false
@@ -245,7 +246,7 @@ export async function requisicao(endpoint, opcoes = {}) {
         return resposta({ produtos });
     }
 
-    if (endpoint.startsWith("/api/produtos/") && metodo === "GET") {
+    if (caminho.startsWith("/api/produtos/") && metodo === "GET") {
         const id = Number(endpoint.split("?")[0].split("/").pop());
 
         const produto = obterProdutos().find(
@@ -263,7 +264,7 @@ export async function requisicao(endpoint, opcoes = {}) {
     // CATEGORIAS
     // =====================================
 
-    if (endpoint === "/api/categorias" && metodo === "GET") {
+    if (caminho === "/api/categorias" && metodo === "GET") {
         return resposta({
             categorias: categoriasDemo
         });
@@ -273,7 +274,7 @@ export async function requisicao(endpoint, opcoes = {}) {
     // LOCAÇÕES
     // =====================================
 
-    if (endpoint === "/api/locacoes" && metodo === "GET") {
+    if (caminho === "/api/locacoes" && metodo === "GET") {
         if (!token || !usuarioAtual) {
             erro("Faça login para consultar suas locações.");
         }
@@ -285,7 +286,7 @@ export async function requisicao(endpoint, opcoes = {}) {
         return resposta({ locacoes });
     }
 
-    if (endpoint === "/api/locacoes" && metodo === "POST") {
+    if (caminho === "/api/locacoes" && metodo === "POST") {
         if (!token || !usuarioAtual) {
             erro("Faça login para realizar uma locação.");
         }
